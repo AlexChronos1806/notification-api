@@ -29,7 +29,7 @@ public class User {
     public User() {
     }
 
-    public User(UserBuilder userBuilder) {
+    private User(UserBuilder userBuilder) {
         this.id = userBuilder.id;
         this.name = userBuilder.name;
         this.email = userBuilder.email;

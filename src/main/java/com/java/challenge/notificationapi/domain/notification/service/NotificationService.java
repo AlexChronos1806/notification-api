@@ -2,6 +2,7 @@ package com.java.challenge.notificationapi.domain.notification.service;
 
 import com.java.challenge.notificationapi.domain.notification.Category;
 import com.java.challenge.notificationapi.domain.notification.Notification;
+import com.java.challenge.notificationapi.domain.notification.dto.NotificationDTO;
 import com.java.challenge.notificationapi.domain.notification.dto.RequestDTO;
 import com.java.challenge.notificationapi.domain.notification.dto.ResponseDTO;
 import com.java.challenge.notificationapi.domain.notification.validation.RequestValidator;
@@ -36,8 +37,12 @@ public class NotificationService {
 
         List<User> users = userService.getUsersByCategory(category);
 
-        notifications.forEach(notification -> notification.send(category, requestDTO.getMessage()));
+        List<NotificationDTO> notificationDTOS = notifications.stream()
+                .map(notification -> notification.send(category, requestDTO.getMessage()))
+                .collect(Collectors.toList());
 
-        return users.stream().map(ResponseDTO::new).collect(Collectors.toList());
+        //notifications.forEach(notification -> notification.send(category, requestDTO.getMessage()));
+
+        return users.stream().map(user -> new ResponseDTO(user, notificationDTOS)).collect(Collectors.toList());
     }
 }

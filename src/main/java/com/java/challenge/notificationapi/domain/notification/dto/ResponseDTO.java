@@ -15,6 +15,8 @@ public class ResponseDTO {
     private List<Category> subscriptions;
     private List<NotificationType> channels;
 
+    private List<NotificationDTO> notifications;
+
     public Long getUserId() {
         return userId;
     }
@@ -39,13 +41,18 @@ public class ResponseDTO {
         return channels;
     }
 
-    public ResponseDTO(User user) {
+    public List<NotificationDTO> getNotifications() {
+        return notifications;
+    }
+
+    public ResponseDTO(User user, List<NotificationDTO> notifications) {
         this.userId = user.getId();
         this.userName = user.getName();
         this.userEmail = user.getEmail();
         this.userPhone = user.getPhone();
         this.subscriptions = user.getCategories();
         this.channels = user.getChannels();
+        this.notifications = notifications;
     }
 
     @Override
@@ -57,6 +64,7 @@ public class ResponseDTO {
                 ", userPhone='" + userPhone + '\'' +
                 ", subscriptions=" + subscriptions +
                 ", channels=" + channels +
+                ", notifications=" + notifications +
                 '}';
     }
 }
