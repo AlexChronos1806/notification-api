@@ -41,8 +41,6 @@ public class NotificationService {
                 .map(notification -> notification.send(category, requestDTO.getMessage()))
                 .collect(Collectors.toList());
 
-        //notifications.forEach(notification -> notification.send(category, requestDTO.getMessage()));
-
         return users.stream().map(user -> new ResponseDTO(user, notificationDTOS)).collect(Collectors.toList());
     }
 }
