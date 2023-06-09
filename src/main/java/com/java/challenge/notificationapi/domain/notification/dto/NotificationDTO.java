@@ -19,6 +19,9 @@ public class NotificationDTO {
         this.dateTime = notificationDTOBuilder.dateTime;
     }
 
+    public NotificationDTO() {
+    }
+
     public String getMessage() {
         return message;
     }

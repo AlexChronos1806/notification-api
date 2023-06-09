@@ -45,6 +45,9 @@ public class ResponseDTO {
         return notifications;
     }
 
+    public ResponseDTO() {
+    }
+
     public ResponseDTO(User user, List<NotificationDTO> notifications) {
         this.userId = user.getId();
         this.userName = user.getName();
