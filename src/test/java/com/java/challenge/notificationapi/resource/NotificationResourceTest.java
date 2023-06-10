@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.java.challenge.notificationapi.domain.notification.dto.RequestDTO;
 import com.java.challenge.notificationapi.domain.notification.dto.ResponseDTO;
+import com.java.challenge.notificationapi.infra.ErrorDTO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,7 +36,7 @@ class NotificationResourceTest {
 
     @Test
     void shouldSendRequestAndReturnResponseSuccessfullyWhenCategoryIsSports() throws Exception {
-        RequestDTO requestDTO = createRequestDTO("SPORTS", "Testing message to send to all channels");
+        RequestDTO requestDTO = createRequestDTO("SPORTS", "Testing message with category Sports to send to all channels");
 
         ResultActions resultActions = mockMvc.perform(post("/notifications")
                         .contentType("application/json")
@@ -48,11 +49,26 @@ class NotificationResourceTest {
 
         Assertions.assertNotNull(responseDTOS);
         Assertions.assertEquals(3, responseDTOS.size());
+        Assertions.assertEquals(3, responseDTOS.get(0).getNotifications().size());
+        Assertions.assertEquals(3, responseDTOS.get(1).getNotifications().size());
+        Assertions.assertEquals(3, responseDTOS.get(2).getNotifications().size());
+
+        Assertions.assertEquals("Testing message with category Sports to send to all channels", responseDTOS.get(0).getNotifications().get(0).getMessage());
+        Assertions.assertEquals("Testing message with category Sports to send to all channels", responseDTOS.get(0).getNotifications().get(1).getMessage());
+        Assertions.assertEquals("Testing message with category Sports to send to all channels", responseDTOS.get(0).getNotifications().get(2).getMessage());
+
+        Assertions.assertEquals("Testing message with category Sports to send to all channels", responseDTOS.get(1).getNotifications().get(0).getMessage());
+        Assertions.assertEquals("Testing message with category Sports to send to all channels", responseDTOS.get(1).getNotifications().get(1).getMessage());
+        Assertions.assertEquals("Testing message with category Sports to send to all channels", responseDTOS.get(1).getNotifications().get(2).getMessage());
+
+        Assertions.assertEquals("Testing message with category Sports to send to all channels", responseDTOS.get(2).getNotifications().get(0).getMessage());
+        Assertions.assertEquals("Testing message with category Sports to send to all channels", responseDTOS.get(2).getNotifications().get(1).getMessage());
+        Assertions.assertEquals("Testing message with category Sports to send to all channels", responseDTOS.get(2).getNotifications().get(2).getMessage());
     }
 
     @Test
     void shouldSendRequestAndReturnResponseSuccessfullyWhenCategoryIsFilms() throws Exception {
-        RequestDTO requestDTO = createRequestDTO("FILMS", "Testing message to send to all channels");
+        RequestDTO requestDTO = createRequestDTO("FILMS", "Testing message with category Films to send to all channels");
 
         ResultActions resultActions = mockMvc.perform(post("/notifications")
                         .contentType("application/json")
@@ -65,11 +81,21 @@ class NotificationResourceTest {
 
         Assertions.assertNotNull(responseDTOS);
         Assertions.assertEquals(2, responseDTOS.size());
+        Assertions.assertEquals(3, responseDTOS.get(0).getNotifications().size());
+        Assertions.assertEquals(3, responseDTOS.get(1).getNotifications().size());
+
+        Assertions.assertEquals("Testing message with category Films to send to all channels", responseDTOS.get(0).getNotifications().get(0).getMessage());
+        Assertions.assertEquals("Testing message with category Films to send to all channels", responseDTOS.get(0).getNotifications().get(1).getMessage());
+        Assertions.assertEquals("Testing message with category Films to send to all channels", responseDTOS.get(0).getNotifications().get(2).getMessage());
+
+        Assertions.assertEquals("Testing message with category Films to send to all channels", responseDTOS.get(1).getNotifications().get(0).getMessage());
+        Assertions.assertEquals("Testing message with category Films to send to all channels", responseDTOS.get(1).getNotifications().get(1).getMessage());
+        Assertions.assertEquals("Testing message with category Films to send to all channels", responseDTOS.get(1).getNotifications().get(2).getMessage());
     }
 
     @Test
     void shouldSendRequestAndReturnResponseSuccessfullyWhenCategoryIsFinance() throws Exception {
-        RequestDTO requestDTO = createRequestDTO("FINANCE", "Testing message to send to all channels");
+        RequestDTO requestDTO = createRequestDTO("FINANCE", "Testing message with category Finance to send to all channels");
 
         ResultActions resultActions = mockMvc.perform(post("/notifications")
                         .contentType("application/json")
@@ -82,6 +108,45 @@ class NotificationResourceTest {
 
         Assertions.assertNotNull(responseDTOS);
         Assertions.assertEquals(1, responseDTOS.size());
+        Assertions.assertEquals(3, responseDTOS.get(0).getNotifications().size());
+
+        Assertions.assertEquals("Testing message with category Finance to send to all channels", responseDTOS.get(0).getNotifications().get(0).getMessage());
+        Assertions.assertEquals("Testing message with category Finance to send to all channels", responseDTOS.get(0).getNotifications().get(1).getMessage());
+        Assertions.assertEquals("Testing message with category Finance to send to all channels", responseDTOS.get(0).getNotifications().get(2).getMessage());
+    }
+
+    @Test
+    void shouldSendRequestAndReturnInvalidCategoryResponse() throws Exception {
+        RequestDTO requestDTO = createRequestDTO("FINANCEE", "Testing message to send to all channels");
+
+        ResultActions resultActions = mockMvc.perform(post("/notifications")
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(requestDTO)))
+                .andExpect(status().isBadRequest());
+
+        String responseAsString = resultActions.andReturn().getResponse().getContentAsString();
+
+        ErrorDTO errorDTO = objectMapper.readValue(responseAsString, ErrorDTO.class);
+
+        Assertions.assertNotNull(errorDTO);
+        Assertions.assertEquals("Invalid category!", errorDTO.getMessage());
+    }
+
+    @Test
+    void shouldSendRequestAndReturnInvalidMessageResponse() throws Exception {
+        RequestDTO requestDTO = createRequestDTO("FINANCE", "");
+
+        ResultActions resultActions = mockMvc.perform(post("/notifications")
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(requestDTO)))
+                .andExpect(status().isBadRequest());
+
+        String responseAsString = resultActions.andReturn().getResponse().getContentAsString();
+
+        ErrorDTO errorDTO = objectMapper.readValue(responseAsString, ErrorDTO.class);
+
+        Assertions.assertNotNull(errorDTO);
+        Assertions.assertEquals("Invalid message!", errorDTO.getMessage());
     }
 
     private RequestDTO createRequestDTO(String category, String message) {
