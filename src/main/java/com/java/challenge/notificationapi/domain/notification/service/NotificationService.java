@@ -1,19 +1,22 @@
 package com.java.challenge.notificationapi.domain.notification.service;
 
-import com.java.challenge.notificationapi.domain.notification.Category;
+import com.java.challenge.notificationapi.domain.category.Category;
+import com.java.challenge.notificationapi.domain.category.CategoryService;
+import com.java.challenge.notificationapi.domain.notification.CategoryType;
 import com.java.challenge.notificationapi.domain.notification.Notification;
 import com.java.challenge.notificationapi.domain.notification.dto.NotificationDTO;
 import com.java.challenge.notificationapi.domain.notification.dto.RequestDTO;
 import com.java.challenge.notificationapi.domain.notification.dto.ResponseDTO;
 import com.java.challenge.notificationapi.domain.notification.validation.RequestValidator;
 import com.java.challenge.notificationapi.domain.user.User;
-import com.java.challenge.notificationapi.domain.user.service.UserService;
+import com.java.challenge.notificationapi.domain.user.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,15 +33,20 @@ public class NotificationService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private CategoryService categoryService;
+
     public List<ResponseDTO> processRequest(RequestDTO requestDTO) {
         validations.forEach(validate -> validate.validate(requestDTO));
 
-        Category category = Category.getCategory(requestDTO.getCategory());
+        Set<Category> categories = categoryService.findCategoriesByName(requestDTO.getCategory());
 
-        List<User> users = userService.getUsersByCategory(category);
+        List<User> users = userService.getUsersByCategory(categories);
+
+        CategoryType categoryType = CategoryType.getCategory(requestDTO.getCategory());
 
         List<NotificationDTO> notificationDTOS = notifications.stream()
-                .map(notification -> notification.send(category, requestDTO.getMessage()))
+                .map(notification -> notification.send(categoryType, requestDTO.getMessage()))
                 .collect(Collectors.toList());
 
         return users.stream().map(user -> new ResponseDTO(user, notificationDTOS)).collect(Collectors.toList());

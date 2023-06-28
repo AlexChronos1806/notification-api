@@ -4,7 +4,7 @@ import com.java.challenge.notificationapi.domain.notification.dto.NotificationDT
 
 public interface Notification {
 
-    NotificationDTO send(Category category, String message);
+    NotificationDTO send(CategoryType categoryType, String message);
 
     NotificationType getNotificationType();
 }

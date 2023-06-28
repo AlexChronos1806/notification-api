@@ -1,6 +1,6 @@
 package com.java.challenge.notificationapi.domain.notification.validation;
 
-import com.java.challenge.notificationapi.domain.notification.Category;
+import com.java.challenge.notificationapi.domain.notification.CategoryType;
 import com.java.challenge.notificationapi.domain.notification.dto.RequestDTO;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +12,7 @@ public class CategoryRequestValidator implements RequestValidator {
     public void validate(RequestDTO requestDTO) {
         final String category = requestDTO.getCategory();
 
-        if (Arrays.stream(Category.values()).noneMatch(categoryEnum -> categoryEnum.name().equalsIgnoreCase(category))) {
+        if (Arrays.stream(CategoryType.values()).noneMatch(categoryEnum -> categoryEnum.name().equalsIgnoreCase(category))) {
             throw new ValidationException("Invalid category!");
         }
     }

@@ -1,6 +1,6 @@
 package com.java.challenge.notificationapi.domain.notification.dto;
 
-import com.java.challenge.notificationapi.domain.notification.Category;
+import com.java.challenge.notificationapi.domain.notification.CategoryType;
 import com.java.challenge.notificationapi.domain.notification.NotificationType;
 
 import java.time.LocalDateTime;
@@ -8,13 +8,13 @@ import java.time.LocalDateTime;
 public class NotificationDTO {
 
     private String message;
-    private Category category;
+    private CategoryType categoryType;
     private NotificationType notificationType;
     private LocalDateTime dateTime;
 
     private NotificationDTO(NotificationDTOBuilder notificationDTOBuilder) {
         this.message = notificationDTOBuilder.message;
-        this.category = notificationDTOBuilder.category;
+        this.categoryType = notificationDTOBuilder.categoryType;
         this.notificationType = notificationDTOBuilder.notificationType;
         this.dateTime = notificationDTOBuilder.dateTime;
     }
@@ -26,8 +26,8 @@ public class NotificationDTO {
         return message;
     }
 
-    public Category getCategory() {
-        return category;
+    public CategoryType getCategoryType() {
+        return categoryType;
     }
 
     public NotificationType getNotificationType() {
@@ -42,7 +42,7 @@ public class NotificationDTO {
     public String toString() {
         return "NotificationDTO{" +
                 "message='" + message + '\'' +
-                ", category=" + category +
+                ", categoryType=" + categoryType +
                 ", notificationType=" + notificationType +
                 ", dateTime=" + dateTime +
                 '}';
@@ -50,7 +50,7 @@ public class NotificationDTO {
 
     public static class NotificationDTOBuilder {
         private String message;
-        private Category category;
+        private CategoryType categoryType;
         private NotificationType notificationType;
         private LocalDateTime dateTime;
 
@@ -59,8 +59,8 @@ public class NotificationDTO {
             return this;
         }
 
-        public NotificationDTOBuilder category(Category category) {
-            this.category = category;
+        public NotificationDTOBuilder categoryType(CategoryType categoryType) {
+            this.categoryType = categoryType;
             return this;
         }
 

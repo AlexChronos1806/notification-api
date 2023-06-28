@@ -1,18 +1,30 @@
 package com.java.challenge.notificationapi.domain.user.service;
 
-import com.java.challenge.notificationapi.domain.notification.Category;
-import com.java.challenge.notificationapi.domain.notification.NotificationType;
+import com.java.challenge.notificationapi.domain.category.Category;
 import com.java.challenge.notificationapi.domain.user.User;
-import com.java.challenge.notificationapi.domain.user.repository.UserRepository;
-import org.junit.jupiter.api.Assertions;
+import com.java.challenge.notificationapi.domain.user.UserRepository;
+import com.java.challenge.notificationapi.domain.user.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Set;
+
+import static com.java.challenge.notificationapi.domain.helper.UserFactoryHelper.createChannelsSet;
+import static com.java.challenge.notificationapi.domain.helper.UserFactoryHelper.createOneCategorySet;
+import static com.java.challenge.notificationapi.domain.helper.UserFactoryHelper.createOneUser;
+import static com.java.challenge.notificationapi.domain.helper.UserFactoryHelper.createThreeCategorySet;
+import static com.java.challenge.notificationapi.domain.helper.UserFactoryHelper.createThreeUsers;
+import static com.java.challenge.notificationapi.domain.helper.UserFactoryHelper.createTwoCategorySet;
+import static com.java.challenge.notificationapi.domain.helper.UserFactoryHelper.createTwoUsers;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
@@ -24,103 +36,70 @@ class UserServiceTest {
 
     @Test
     void shouldReturnAListOfUsersByCategorySports() {
-        final Category category = Category.SPORTS;
-        List<User> users = createUsers();
+        Set<Category> categorySet = createOneCategorySet(1L, "SPORTS");
 
-        Mockito.when(userRepository.findAll()).thenReturn(users);
+        when(userRepository.findUserByCategorySetIn(categorySet)).thenReturn(createThreeUsers());
 
-        List<User> usersByCategory = userService.getUsersByCategory(category);
+        List<User> usersByCategory = userService.getUsersByCategory(categorySet);
 
-        Assertions.assertNotNull(usersByCategory);
-        Assertions.assertEquals(3, usersByCategory.size());
+        assertNotNull(usersByCategory);
+        assertEquals(3, usersByCategory.size());
 
-        Assertions.assertEquals("Alex", usersByCategory.get(0).getName());
-        Assertions.assertEquals("John", usersByCategory.get(1).getName());
-        Assertions.assertEquals("Brian", usersByCategory.get(2).getName());
+        assertEquals("Alex", usersByCategory.get(0).getName());
+        assertEquals("John", usersByCategory.get(1).getName());
+        assertEquals("Brian", usersByCategory.get(2).getName());
 
-        Assertions.assertEquals(List.of(Category.FILMS, Category.SPORTS), usersByCategory.get(0).getCategories());
-        Assertions.assertEquals(List.of(Category.FINANCE, Category.SPORTS, Category.FILMS), usersByCategory.get(1).getCategories());
-        Assertions.assertEquals(List.of(Category.SPORTS), usersByCategory.get(2).getCategories());
+        assertEquals(createOneCategorySet(), usersByCategory.get(0).getCategorySet());
+        assertEquals(createTwoCategorySet(), usersByCategory.get(1).getCategorySet());
+        assertEquals(createThreeCategorySet(), usersByCategory.get(2).getCategorySet());
 
-        Assertions.assertEquals(List.of(NotificationType.SMS, NotificationType.EMAIL, NotificationType.PUSH), usersByCategory.get(0).getChannels());
-        Assertions.assertEquals(List.of(NotificationType.SMS, NotificationType.EMAIL, NotificationType.PUSH), usersByCategory.get(1).getChannels());
-        Assertions.assertEquals(List.of(NotificationType.SMS, NotificationType.EMAIL, NotificationType.PUSH), usersByCategory.get(2).getChannels());
+        assertEquals(createChannelsSet(), usersByCategory.get(0).getChannelSet());
+        assertEquals(createChannelsSet(), usersByCategory.get(1).getChannelSet());
+        assertEquals(createChannelsSet(), usersByCategory.get(2).getChannelSet());
 
-        Mockito.verify(userRepository, Mockito.times(1)).findAll();
+        verify(userRepository, times(1)).findUserByCategorySetIn(categorySet);
     }
 
     @Test
     void shouldReturnAListOfUsersByCategoryFinance() {
-        final Category category = Category.FINANCE;
-        List<User> users = createUsers();
+        Set<Category> categorySet = createOneCategorySet(2L, "FINANCE");
 
-        Mockito.when(userRepository.findAll()).thenReturn(users);
+        when(userRepository.findUserByCategorySetIn(categorySet)).thenReturn(createOneUser());
 
-        List<User> usersByCategory = userService.getUsersByCategory(category);
+        List<User> usersByCategory = userService.getUsersByCategory(categorySet);
 
-        Assertions.assertNotNull(usersByCategory);
-        Assertions.assertEquals(1, usersByCategory.size());
+        assertNotNull(usersByCategory);
+        assertEquals(1, usersByCategory.size());
 
-        Assertions.assertEquals("John", usersByCategory.get(0).getName());
-        Assertions.assertEquals(List.of(Category.FINANCE, Category.SPORTS, Category.FILMS), usersByCategory.get(0).getCategories());
+        assertEquals("Brian", usersByCategory.get(0).getName());
 
-        Assertions.assertEquals(List.of(NotificationType.SMS, NotificationType.EMAIL, NotificationType.PUSH), usersByCategory.get(0).getChannels());
+        assertEquals(createThreeCategorySet(), usersByCategory.get(0).getCategorySet());
 
-        Mockito.verify(userRepository, Mockito.times(1)).findAll();
+        assertEquals(createChannelsSet(), usersByCategory.get(0).getChannelSet());
+
+        verify(userRepository, times(1)).findUserByCategorySetIn(categorySet);
     }
 
     @Test
     void shouldReturnAListOfUsersByCategoryFilms() {
-        final Category category = Category.FILMS;
-        List<User> users = createUsers();
+        Set<Category> categorySet = createOneCategorySet(3L, "FILMS");
 
-        Mockito.when(userRepository.findAll()).thenReturn(users);
+        when(userRepository.findUserByCategorySetIn(categorySet)).thenReturn(createTwoUsers());
 
-        List<User> usersByCategory = userService.getUsersByCategory(category);
+        List<User> usersByCategory = userService.getUsersByCategory(categorySet);
 
-        Assertions.assertNotNull(usersByCategory);
-        Assertions.assertEquals(2, usersByCategory.size());
+        assertNotNull(usersByCategory);
+        assertEquals(2, usersByCategory.size());
 
-        Assertions.assertEquals("Alex", usersByCategory.get(0).getName());
-        Assertions.assertEquals("John", usersByCategory.get(1).getName());
+        assertEquals("Alex", usersByCategory.get(0).getName());
+        assertEquals("John", usersByCategory.get(1).getName());
 
-        Assertions.assertEquals(List.of(Category.FILMS, Category.SPORTS), usersByCategory.get(0).getCategories());
-        Assertions.assertEquals(List.of(Category.FINANCE, Category.SPORTS, Category.FILMS), usersByCategory.get(1).getCategories());
+        assertEquals(createOneCategorySet(), usersByCategory.get(0).getCategorySet());
+        assertEquals(createTwoCategorySet(), usersByCategory.get(1).getCategorySet());
 
-        Assertions.assertEquals(List.of(NotificationType.SMS, NotificationType.EMAIL, NotificationType.PUSH), usersByCategory.get(0).getChannels());
-        Assertions.assertEquals(List.of(NotificationType.SMS, NotificationType.EMAIL, NotificationType.PUSH), usersByCategory.get(1).getChannels());
+        assertEquals(createChannelsSet(), usersByCategory.get(0).getChannelSet());
+        assertEquals(createChannelsSet(), usersByCategory.get(1).getChannelSet());
 
-        Mockito.verify(userRepository, Mockito.times(1)).findAll();
-    }
-
-    private List<User> createUsers() {
-        return List.of(createUserOne(), createUserTwo(), createUserThree());
-    }
-
-    private User createUserOne() {
-        return new User.UserBuilder()
-                .id(1L)
-                .name("Alex")
-                .email("alex@test.com")
-                .phone("123-45677")
-                .build();
-    }
-
-    private User createUserTwo() {
-        return new User.UserBuilder()
-                .id(2L)
-                .name("John")
-                .email("john@test.com")
-                .phone("123-22233")
-                .build();
-    }
-
-    private User createUserThree() {
-        return new User.UserBuilder()
-                .id(3L)
-                .name("Brian")
-                .email("brian@test.com")
-                .phone("123-11144")
-                .build();
+        verify(userRepository, times(1)).findUserByCategorySetIn(categorySet);
     }
 }

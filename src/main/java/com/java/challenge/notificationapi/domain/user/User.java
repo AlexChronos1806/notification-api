@@ -1,14 +1,16 @@
 package com.java.challenge.notificationapi.domain.user;
 
-import com.java.challenge.notificationapi.domain.notification.Category;
-import com.java.challenge.notificationapi.domain.notification.NotificationType;
+import com.java.challenge.notificationapi.domain.category.Category;
+import com.java.challenge.notificationapi.domain.channel.Channel;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -20,11 +22,21 @@ public class User {
     private String email;
     private String phone;
 
-    @Transient
-    private List<Category> categories;
+    @ManyToMany
+    @JoinTable(
+            name = "users_categories",
+            joinColumns = @JoinColumn(name = "users_id"),
+            inverseJoinColumns = @JoinColumn(name = "categories_id")
+    )
+    private Set<Category> categorySet;
 
-    @Transient
-    private List<NotificationType> channels;
+    @ManyToMany
+    @JoinTable(
+            name = "users_channels",
+            joinColumns = @JoinColumn(name = "users_id"),
+            inverseJoinColumns = @JoinColumn(name = "channels_id")
+    )
+    private Set<Channel> channelSet;
 
     public User() {
     }
@@ -34,8 +46,8 @@ public class User {
         this.name = userBuilder.name;
         this.email = userBuilder.email;
         this.phone = userBuilder.phone;
-        this.categories = userBuilder.categories;
-        this.channels = userBuilder.channels;
+        this.categorySet = userBuilder.categorySet;
+        this.channelSet = userBuilder.channelSet;
     }
 
     public Long getId() {
@@ -70,20 +82,20 @@ public class User {
         this.phone = phone;
     }
 
-    public List<Category> getCategories() {
-        return categories;
+    public Set<Category> getCategorySet() {
+        return categorySet;
     }
 
-    public void setCategories(List<Category> categories) {
-        this.categories = categories;
+    public void setCategorySet(Set<Category> categorySet) {
+        this.categorySet = categorySet;
     }
 
-    public List<NotificationType> getChannels() {
-        return channels;
+    public Set<Channel> getChannelSet() {
+        return channelSet;
     }
 
-    public void setChannels(List<NotificationType> channels) {
-        this.channels = channels;
+    public void setChannelSet(Set<Channel> channelSet) {
+        this.channelSet = channelSet;
     }
 
     @Override
@@ -99,25 +111,13 @@ public class User {
         return Objects.hash(id);
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", phone='" + phone + '\'' +
-                ", categories=" + categories +
-                ", channels=" + channels +
-                '}';
-    }
-
     public static class UserBuilder {
         private Long id;
         private String name;
         private String email;
         private String phone;
-        private List<Category> categories;
-        private List<NotificationType> channels;
+        private Set<Category> categorySet;
+        private Set<Channel> channelSet;
 
         public UserBuilder id(Long id) {
             this.id = id;
@@ -139,13 +139,13 @@ public class User {
             return this;
         }
 
-        public UserBuilder categories(List<Category> categories) {
-            this.categories = categories;
+        public UserBuilder categories(Set<Category> categorySet) {
+            this.categorySet = categorySet;
             return this;
         }
 
-        public UserBuilder channels(List<NotificationType> channels) {
-            this.channels = channels;
+        public UserBuilder channels(Set<Channel> channelSet) {
+            this.channelSet = channelSet;
             return this;
         }
 

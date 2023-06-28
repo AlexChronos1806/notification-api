@@ -1,10 +1,11 @@
 package com.java.challenge.notificationapi.domain.notification.dto;
 
-import com.java.challenge.notificationapi.domain.notification.Category;
-import com.java.challenge.notificationapi.domain.notification.NotificationType;
+import com.java.challenge.notificationapi.domain.category.Category;
+import com.java.challenge.notificationapi.domain.channel.Channel;
 import com.java.challenge.notificationapi.domain.user.User;
 
 import java.util.List;
+import java.util.Set;
 
 public class ResponseDTO {
 
@@ -12,8 +13,8 @@ public class ResponseDTO {
     private String userName;
     private String userEmail;
     private String userPhone;
-    private List<Category> subscriptions;
-    private List<NotificationType> channels;
+    private Set<Category> subscriptions;
+    private Set<Channel> channels;
 
     private List<NotificationDTO> notifications;
 
@@ -33,11 +34,11 @@ public class ResponseDTO {
         return userPhone;
     }
 
-    public List<Category> getSubscriptions() {
+    public Set<Category> getSubscriptions() {
         return subscriptions;
     }
 
-    public List<NotificationType> getChannels() {
+    public Set<Channel> getChannels() {
         return channels;
     }
 
@@ -53,8 +54,8 @@ public class ResponseDTO {
         this.userName = user.getName();
         this.userEmail = user.getEmail();
         this.userPhone = user.getPhone();
-        this.subscriptions = user.getCategories();
-        this.channels = user.getChannels();
+        this.subscriptions = user.getCategorySet();
+        this.channels = user.getChannelSet();
         this.notifications = notifications;
     }
 
