@@ -111,6 +111,16 @@ public class User {
         return Objects.hash(id);
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                '}';
+    }
+
     public static class UserBuilder {
         private Long id;
         private String name;
