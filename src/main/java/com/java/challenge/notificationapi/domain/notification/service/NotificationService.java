@@ -71,11 +71,9 @@ public class NotificationService {
     }
 
     private List<NotificationDTO> sendNotifications(CategoryType categoryType, String message) {
-        List<NotificationDTO> notificationDTOS = notifications.stream()
+        return notifications.stream()
                 .map(notification -> notification.send(categoryType, message))
                 .collect(Collectors.toList());
-
-        return notificationDTOS;
     }
 
     private List<ResponseDTO> createResponseDTO(List<User> users, List<NotificationDTO> notificationDTOS) {
