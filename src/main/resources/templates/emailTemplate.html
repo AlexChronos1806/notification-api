@@ -1,11 +1,23 @@
-<html>
-    <head>
-        <title>Email sending notification</title>
-    </head>
-    <body>
-        <h1>Email sending notification system</h1>
-        <h2>Dear user,</h2>
-        <h3>You received a message that was sent from the notification system</h3>
-        <p>${message}</p>
-    </body>
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Email sending notification</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+</head>
+<body>
+<h1>Email sending notification system</h1>
+<hr/>
+<div class="card" style="width: 18rem;">
+    <div class="card-body">
+        <h2 class="card-title">Notification</h2>
+        <h3 class="card-subtitle mb-2 text-body-secondary">Dear user, you received a message that was sent from the notification system</h3>
+        <p class="card-text">${message}</p>
+        <a href="https://www.espn.com.br/" class="card-link">ESPN</a>
+        <a href="https://ge.globo.com/" class="card-link">GE</a>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+</body>
 </html>

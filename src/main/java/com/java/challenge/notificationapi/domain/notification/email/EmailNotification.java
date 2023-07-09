@@ -57,7 +57,7 @@ public class EmailNotification extends NotificationAbstract {
             javaMailSender.send(mimeMessage);
 
         } catch (Exception ex) {
-            logger.error("An error occurred while sending email {}", ex);
+            logger.error("An error occurred while sending email", ex);
             throw new EmailException(ex.getMessage());
         }
 

@@ -14,30 +14,30 @@ public class NotificationErrorHandler {
 
     @ExceptionHandler(ValidationException.class)
     public ResponseEntity<ErrorDTO> handleValidationException(ValidationException ex, HttpServletRequest request) {
-        return createErrorResponse(ex, request);
+        ErrorDTO errorDTO = new ErrorDTO(request.getRequestURI(), System.currentTimeMillis(), ex.getMessage());
+        return ResponseEntity.badRequest().body(errorDTO);
     }
 
     @ExceptionHandler(CategoryNotFoundException.class)
     public ResponseEntity<ErrorDTO> handleCategoryNotFoundException(CategoryNotFoundException ex, HttpServletRequest request) {
-        return createErrorResponse(ex, request);
+        ErrorDTO errorDTO = new ErrorDTO(request.getRequestURI(), System.currentTimeMillis(), ex.getMessage());
+        return ResponseEntity.unprocessableEntity().body(errorDTO);
     }
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ErrorDTO> handleUserNotFoundException(UserNotFoundException ex, HttpServletRequest request) {
-        return createErrorResponse(ex, request);
+        ErrorDTO errorDTO = new ErrorDTO(request.getRequestURI(), System.currentTimeMillis(), ex.getMessage());
+        return ResponseEntity.unprocessableEntity().body(errorDTO);
     }
 
     @ExceptionHandler(EmailException.class)
     public ResponseEntity<ErrorDTO> handleEmailException(EmailException ex, HttpServletRequest request) {
-        return createErrorResponse(ex, request);
+        ErrorDTO errorDTO = new ErrorDTO(request.getRequestURI(), System.currentTimeMillis(), ex.getMessage());
+        return ResponseEntity.unprocessableEntity().body(errorDTO);
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorDTO> handleException(Exception ex, HttpServletRequest request) {
-        return createErrorResponse(ex, request);
-    }
-
-    private ResponseEntity<ErrorDTO> createErrorResponse(Exception ex, HttpServletRequest request) {
         ErrorDTO errorDTO = new ErrorDTO(request.getRequestURI(), System.currentTimeMillis(), ex.getMessage());
         return ResponseEntity.internalServerError().body(errorDTO);
     }
