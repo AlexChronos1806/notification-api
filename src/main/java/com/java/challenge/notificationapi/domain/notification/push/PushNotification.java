@@ -1,5 +1,7 @@
-package com.java.challenge.notificationapi.domain.notification;
+package com.java.challenge.notificationapi.domain.notification.push;
 
+import com.java.challenge.notificationapi.domain.notification.NotificationAbstract;
+import com.java.challenge.notificationapi.domain.notification.NotificationType;
 import com.java.challenge.notificationapi.domain.notification.dto.NotificationDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +18,7 @@ public class PushNotification extends NotificationAbstract {
     }
 
     @Override
-    public void logger(NotificationDTO notificationDTO) {
+    public void sendNotification(NotificationDTO notificationDTO) {
         logger.info("Sending message to Push notification");
         logger.info("Data: {}", notificationDTO);
     }

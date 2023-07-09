@@ -7,17 +7,17 @@ import java.time.LocalDateTime;
 public abstract class NotificationAbstract implements Notification {
 
     @Override
-    public NotificationDTO send(CategoryType categoryType, String message) {
+    public NotificationDTO createNotification(CategoryType categoryType, String message) {
         NotificationDTO notificationDTO = new NotificationDTO.NotificationDTOBuilder()
                 .message(message)
                 .categoryType(categoryType)
                 .notificationType(getNotificationType())
                 .dateTime(LocalDateTime.now()).build();
 
-        logger(notificationDTO);
+        sendNotification(notificationDTO);
 
         return notificationDTO;
     }
 
-    protected abstract void logger(NotificationDTO notificationDTO);
+    protected abstract void sendNotification(NotificationDTO notificationDTO);
 }

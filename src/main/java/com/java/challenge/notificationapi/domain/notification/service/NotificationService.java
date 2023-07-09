@@ -72,7 +72,7 @@ public class NotificationService {
 
     private List<NotificationDTO> sendNotifications(CategoryType categoryType, String message) {
         return notifications.stream()
-                .map(notification -> notification.send(categoryType, message))
+                .map(notification -> notification.createNotification(categoryType, message))
                 .collect(Collectors.toList());
     }
 
